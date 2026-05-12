@@ -3,6 +3,8 @@ services:
   nginx:
     build: ./requirements/nginx
     image: nginx
+    volumes:
+      - wp_data:/var/www/html
     ports:
       - "443:443"
     networks:

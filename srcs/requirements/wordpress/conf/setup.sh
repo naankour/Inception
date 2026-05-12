@@ -15,8 +15,13 @@ if [ ! -f "/var/www/html/wp-login.php" ]; then
     # Télécharger les fichiers WordPress
     wp core download --allow-root --locale=fr_FR
 
-    # Copier notre wp-config.php dans le dossier WordPress
-    cp /wp-config.php /var/www/html/wp-config.php
+    # Créer le wp-config.php directement depuis les variables d'environnement
+    wp config create \
+        --allow-root \
+        --dbname=${MYSQL_DATABASE} \
+        --dbuser=${MYSQL_USER} \
+        --dbpass=${MYSQL_PASSWORD} \
+        --dbhost=mariadb:3306
 
     # Installer WordPress avec les infos du .env
     wp core install \
@@ -26,6 +31,7 @@ if [ ! -f "/var/www/html/wp-login.php" ]; then
         --admin_user=${WP_ADMIN_USER} \
         --admin_password=${WP_ADMIN_PASSWORD} \
         --admin_email=${WP_ADMIN_EMAIL}
+        
     # Créer un deuxième utilisateur (obligatoire par le sujet 42)
     wp user create \
         --allow-root \
